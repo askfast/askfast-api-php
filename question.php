@@ -2,7 +2,7 @@
 class Question {
     
     public $question_id=null;
-    public $question_url=null;
+    public $question_text=null;
     public $type=null;
     public $url=null;
     public $requester=null;

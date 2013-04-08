@@ -13,35 +13,34 @@ class AskFast {
     
     public function __construct() {
                 
-        $this->url = $_SERVER['HTTP_HOST'];
-        
+        $this->url = 'http://'.$_SERVER["HTTP_HOST"].dirname($_SERVER['PHP_SELF']).'/';
+
         $this->response = new Question();
         $this->response->question_id=1;
-        $this->response->question_url="text://";
+        $this->response->question_text="text://";
     }
     
-    public function ask($ask, $type, $next) {
-        $this->response->question_url.=$ask;
+    public function ask($ask, $type, $next=null) {
+        $this->response->question_text.=$ask;
         $this->response->type=$type;
         
         if($next!=null)
-            $this->response->addAnswer(new Answer(1, null, $next));
+            $this->response->addAnswer(new Answer(1, null, $this->url.$next));
     }
     
     public function addAnswer($answer, $url) {
         
-        if($this->response!=self::QUESTION_TYPE_CLOSED)
+        if($this->response->type!=self::QUESTION_TYPE_CLOSED)
             throw new Exception("Adding question can only be done to closed questions");
-        
-        $this->response->addAnswer(new Answer($this->response->size(), $answer, $url));
+        $this->response->addAnswer(new Answer(count($this->response->answers)+1, "text://".$answer, $this->url.$url));
     }
     
-    public function say($say, $next) {
+    public function say($say, $next=null) {
                 
-        $this->response->question_url.=$say;
+        $this->response->question_text.=$say;
         $this->response->type=self::QUESTION_TYPE_COMMENT;
         if($next!=null)
-            $this->response->addAnswer(new Answer(1, null, $next));
+            $this->response->addAnswer(new Answer(1, null, $this->url.$next));
     }
     
     public function redirect($to, $next) {
@@ -52,8 +51,12 @@ class AskFast {
          $this->response = new stdClass;
     }
     
-    public function finish() {
-        echo json_encode($this->response);
+	public function finish() { 
+		echo $this->unescapeJSON($this->response->toJSON());
     }
+
+	protected function unescapeJSON($json) {
+		return str_replace(array("\\", "\"{", "}\""), array("", "{", "}"), $json);
+	}
 }
 ?>

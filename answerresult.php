@@ -12,11 +12,11 @@ class AnswerResult {
              // if $json is still empty, there was nothing in 
              // the POST so throw exception
           if(empty($json)) {
-               throw new TropoException('No JSON available.', 1);
+               throw new Exception('No JSON available.', 1);
            }
          }
         $result = json_decode($json);
-        if (!is_object($result) || !property_exists($result, "result")) {
+        if (!is_object($result)) {
            throw new Exception('Not a result object.');
         }
         $this->question_id = $result->question_id;
