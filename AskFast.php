@@ -16,13 +16,13 @@ class AskFast {
         $this->url = $_SERVER['HTTP_HOST'];
         
         $this->response = new Question();
-        $this->response->setQuestion_id=1;
-        $this->response->setQuestion_url="text://";
+        $this->response->question_id=1;
+        $this->response->question_url="text://";
     }
     
     public function ask($ask, $type, $next) {
-        $this->response->setQuestion_url.=$ask;
-        $this->response->setType=$type;
+        $this->response->question_url.=$ask;
+        $this->response->type=$type;
         
         if($next!=null)
             $this->response->addAnswer(new Answer(1, null, $next));
@@ -38,8 +38,8 @@ class AskFast {
     
     public function say($say, $next) {
                 
-        $this->response->setQuestion_url.=$say;
-        $this->response->setType=self::QUESTION_TYPE_COMMENT;
+        $this->response->question_url.=$say;
+        $this->response->type=self::QUESTION_TYPE_COMMENT;
         if($next!=null)
             $this->response->addAnswer(new Answer(1, null, $next));
     }
