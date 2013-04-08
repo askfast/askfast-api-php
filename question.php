@@ -15,16 +15,32 @@ class Question {
         $this->event_callbacks=Array();
     }
     
-    public function __set($propertyName, $propertyValue) {
-        $this->{$propertyName} = $propertyValue;
-    }
-    
     public function addAnswer($answer) {
         $this->answers[] = $answer;
     }
     
     public function addEventCallback($eventCallback) {
         $this->event_callbacks[] = $eventCallback;
+    }
+    
+    public function setQuestion_id($questionId) {
+        $this->question_id = $questionId;
+    }
+    
+    public function setQuestion_url($questionUrl) {
+        $this->question_url = $questionUrl;
+    }
+    
+    public function setType($type) {
+        $this->type = $type;
+    }
+    
+    public function setUrl($url) {
+        $this->url = $url;
+    }
+    
+    public function setRequester($requester) {
+        $this->requester = $requester;
     }
     
     public function toJSON() {

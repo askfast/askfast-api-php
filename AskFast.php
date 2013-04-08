@@ -53,7 +53,7 @@ class AskFast {
     }
     
     public function finish() {
-        echo json_encode($response);
+        echo json_encode($this->response);
     }
 }
 ?>
