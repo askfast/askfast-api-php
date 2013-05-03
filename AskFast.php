@@ -1,6 +1,6 @@
 <?php
-require_once('question.php');
-require_once('answer.php');
+require_once('lib/question.php');
+require_once('lib/answer.php');
 
 class AskFast {
     

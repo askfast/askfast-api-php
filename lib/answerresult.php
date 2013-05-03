@@ -21,7 +21,19 @@ class AnswerResult {
         }
         $this->question_id = $result->question_id;
         $this->answer_id = $result->answer_id;
-        $this->answer_tex = $result->answer_tex;
+        $this->answer_text = $result->answer_text;
+    }
+    
+    public function getQuestionId() {
+        return $this->question_id;
+    }
+    
+    public function getAnswerId() {
+        return $this->answer_id;
+    }
+    
+    public function getAnswerText() {
+        return $this->answer_text;
     }
 }
 ?>
