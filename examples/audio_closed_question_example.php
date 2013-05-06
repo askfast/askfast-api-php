@@ -32,7 +32,8 @@ require_once('askfast/lib/answerresult.php');
         if($res=='yes') {
           $askfast->say('/audio/nl/bedankt_voor_uw_invoer.wav');  
         } else {
-          $askfast->redirect('tel:+31643002549','/audio/nl/doorverbinden.wav');
+          //TODO: Fill in real phone numnber
+          $askfast->redirect('tel:+31612345678','/audio/nl/doorverbinden.wav');
         }
         
         return $askfast->finish();
