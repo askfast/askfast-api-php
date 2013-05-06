@@ -8,11 +8,13 @@ require_once('askfast/lib/answerresult.php');
 
     function app_start() {
         global $askfast;
+        global $filename;
         $session = new Session();
         
-        $askfast->ask('/askfast/audio/nl/hoe_vind_u_dit_voorbeeld.wav',AskFast::QUESTION_TYPE_CLOSED);
-        $askfast->addAnswer(new Answer(1,'/askfast/audio/nl/empty.wav', $filename.'?function=thankyou&res=yes'));
-        $askfast->addAnswer(new Answer(2,'/askfast/audio/nl/empty.wav', $filename.'?function=thankyou&res=no'));
+        $askfast->ask('/audio/nl/hoe_vind_u_dit_voorbeeld.wav',AskFast::QUESTION_TYPE_CLOSED);
+        $askfast->addAnswer('/audio/nl/empty.wav', $filename.'?function=thankyou&res=yes');
+        $askfast->addAnswer('/audio/nl/empty.wav', $filename.'?function=thankyou&res=no');
+        $askfast->finish();
     }
         
     function app_hangup() {
@@ -25,13 +27,12 @@ require_once('askfast/lib/answerresult.php');
         global $askfast;
         global $uuid;
         
-        
         $result = new AnswerResult();
         $res = $_GET['res'];
         if($res=='yes') {
-          $askfast->say('/askfast/audio/nl/bedankt_voor_invoer.wav');  
+          $askfast->say('/audio/nl/bedankt_voor_uw_invoer.wav');  
         } else {
-          $askfast->say('/askfast/audio/nl/bedankt_voor_invoer.wav');  
+          $askfast->redirect('tel:+31643002549','/audio/nl/doorverbinden.wav');
         }
         
         return $askfast->finish();
@@ -39,7 +40,7 @@ require_once('askfast/lib/answerresult.php');
     
     function app_failure() {
         
-        $askfast->say('/askfast/audio/nl/fout.wav');
+        $askfast->say('/audio/nl/fout.wav');
         $askfast->finish();
     }
 
