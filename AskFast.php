@@ -30,8 +30,10 @@ class AskFast {
             
             // if it ends with wav it is a audio file
             // so if not we should add text://
-            if(!(substr($ask, -strlen(".wav")) == ".wav")) {
+            else if(!(substr($ask, -strlen(".wav")) == ".wav")) {
                 $this->response->question_text = "text://".$ask;
+            } else {
+                $this->response->question_text = $ask;
             }
         } else {
             // if it ends with wav it is a audio file
@@ -76,8 +78,10 @@ class AskFast {
             
             // if it ends with wav it is a audio file
             // so if not we should add text://
-            if(!(substr($say, -strlen(".wav")) == ".wav")) {
+            else if(!(substr($say, -strlen(".wav")) == ".wav")) {
                 $this->response->question_text = "text://".$say;
+            } else {
+                $this->response->question_text = $say;
             }
         } else {
             // if it ends with wav it is a audio file
@@ -106,8 +110,10 @@ class AskFast {
             
             // if it ends with wav it is a audio file
             // so if not we should add text://
-            if(!(substr($say, -strlen(".wav")) == ".wav")) {
+            else if(!(substr($say, -strlen(".wav")) == ".wav")) {
                 $this->response->question_text = "text://".$say;
+            } else {
+                $this->response->question_text = $say;
             }
         }
         
