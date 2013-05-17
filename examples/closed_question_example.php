@@ -11,7 +11,7 @@ require_once('askfast/lib/answerresult.php');
         global $filename;
         $session = new Session();
         
-        $askfast->ask('Are you coming to the football tournament at 17:00 on Friday?',AskFast::QUESTION_TYPE_CLOSED);
+        $askfast->ask('Are you coming to the football tournament at 17:00 on Friday? ऒ',AskFast::QUESTION_TYPE_CLOSED);
         $askfast->addAnswer('YES', $filename.'?function=thankyou&res=yes');
         $askfast->addAnswer('NO', $filename.'?function=thankyou&res=no');
         $askfast->finish();
