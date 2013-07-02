@@ -11,12 +11,46 @@ class AskFast {
     protected $response = null;
     protected $url = null;
     
-    public function __construct() {
-                
-        $this->url = 'http://'.$_SERVER["HTTP_HOST"].dirname($_SERVER['PHP_SELF']).'/';
+    protected $publicKey = null;
+    protected $privateKey = null;
+    
+    public function __construct($publicKey=false, $privateKey=false) {
+        $file = str_ireplace(dirname($_SERVER['PHP_SELF']),"/","");
+        $this->url = 'http://'.$_SERVER["HTTP_HOST"].$file.'/';
 
         $this->response = new Question();
         $this->response->question_id=1;
+        
+        if($publicKey)
+            $this->publicKey = $publicKey;
+            
+        if($privateKey)
+            $this->privateKey = $privateKey;
+    }
+    
+    public function call($address, $url=null) {
+        
+        if($this->privateKey==null)
+            throw new Exception("No private key set!");
+            
+        if($this->publicKey==null)
+            throw new Exception("No public key set!");
+            
+        if($url==null)
+            $url = $this->url;
+            
+        $url = $this->formatURL($url);
+            
+        //echo "Going to call: ".$address." with url: ".$url."<br />";
+        
+        $params = new stdClass;
+        $params->address = $address;
+        $params->url = $url;
+        $params->publicKey = $this->publicKey;
+        $params->privateKey = $this->privateKey;
+        $params->adapterType = "broadsoft";
+        
+        return $this->sendJSONRPC("outboundCall", $params);
     }
     
     public function ask($ask, $type, $next=null) {
@@ -125,12 +159,47 @@ class AskFast {
          $this->response = new stdClass;
     }
     
-	public function finish() { 
-		echo $this->unescapeJSON($this->response->toJSON());
+    public function finish() { 
+        echo $this->unescapeJSON($this->response->toJSON());
     }
 
-	protected function unescapeJSON($json) {
-		return str_replace(array("\\", "\"{", "}\""), array("", "{", "}"), $json);
-	}
+    protected function unescapeJSON($json) {
+        return str_replace(array("\\", "\"{", "}\""), array("", "{", "}"), $json);
+    }
+        
+    protected function formatURL($url) {
+        
+        // if it starts with http it is a full url
+        if(strpos($url, "http")===0 || strpos($url, "https")===0)
+            return $url;
+            
+        if($this->url!=null)
+            return $this->url . $url;
+    }
+    
+    protected function sendJSONRPC($method, $params) {
+        
+        $url = "http://ask-charlotte.appspot.com/rpc";
+        $req = new stdClass;
+        $req->id = -1;
+        $req->method = $method;
+        $req->params = $params;
+        
+        $json = json_encode($req);
+        
+        //echo "Going to send: ".$json."<br />";
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         
+        $resp = curl_exec($ch);
+        curl_close($ch);
+        
+        $response = json_decode($resp);
+        
+        return $response;
+    }
 }
 ?>
