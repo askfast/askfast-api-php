@@ -15,7 +15,7 @@ class AskFast {
     protected $privateKey = null;
     
     public function __construct($publicKey=false, $privateKey=false) {
-        $file = str_ireplace(dirname($_SERVER['PHP_SELF']),"/","");
+        $file = str_ireplace("\\","",dirname($_SERVER['PHP_SELF']));
         $this->url = 'http://'.$_SERVER["HTTP_HOST"].$file.'/';
 
         $this->response = new Question();
