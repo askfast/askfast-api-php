@@ -37,7 +37,7 @@ class Question extends AskFastObject {
     }
 
     public function addMediaProperty($mediaProperty) {
-        $property = $this->getMediaPropertiesByType($mediaProperty->medium);
+        $property = $this->getMediaPropertiesByMedium($mediaProperty->medium);
 
         $property->properties = array_merge($property->properties, $mediaProperty->properties);
         $this->setMediaProperty($mediaProperty);

@@ -169,9 +169,9 @@ class AskFast {
         $this->response->addEventCallback(new EventCallback($event, $callback));
     }
 
-    public function addProperty($type, $property, $value) {
+    public function addProperty($type, $key, $value) {
         $property = new MediaPropery($type);
-        $property->addProperty($property, $value);
+        $property->addProperty($key, $value);
         $this->response->addMediaProperty($property);
     }
 

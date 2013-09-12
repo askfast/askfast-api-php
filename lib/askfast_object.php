@@ -2,6 +2,6 @@
 class AskFastObject {
 
     public function toJSON() {
-        return json_encode(this);
+        return json_encode($this);
     }
 }
