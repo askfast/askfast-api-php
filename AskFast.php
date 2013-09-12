@@ -1,6 +1,8 @@
 <?php
 require_once('lib/question.php');
 require_once('lib/answer.php');
+require_once('lib/event_callback.php');
+require_once('lib/media_property.php');
 
 class AskFast {
     
