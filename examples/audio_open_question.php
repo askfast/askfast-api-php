@@ -12,7 +12,8 @@ require_once('askfast/lib/answerresult.php');
         global $filename;
         $session = new Session();
         
-        $askfast->ask('/audio/nl/inspreken.wav','openaudio', $filename.'?function=next');
+        $askfast->ask('/audio/nl/inspreken.wav','open', $filename.'?function=next');
+        $askfast->addProperty(MediaPropery::TYPE_BROADSOFT, MediaPropery::PROPERTY_KEY_TYPE, "audio");
         $askfast->finish();
     }
         

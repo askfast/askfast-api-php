@@ -1,5 +1,7 @@
 <?php
-class Answer {
+require_once('askfast_object.php');
+
+class Answer extends AskFastObject {
     
     public $answer_id=null;
     public $answer_text=null;
@@ -9,10 +11,6 @@ class Answer {
         $this->answer_id = $answer_id;
         $this->answer_text = $answer_text;
         $this->callback = $callback;
-    }
-    
-    public function toJSON() {
-        return json_encode($this);
     }
 }
 ?>

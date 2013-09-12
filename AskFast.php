@@ -163,6 +163,16 @@ class AskFast {
         echo $this->unescapeJSON($this->response->toJSON());
     }
 
+    public function addEvent($event, $callback) {
+        $this->response->addEventCallback(new EventCallback($event, $callback));
+    }
+
+    public function addProperty($type, $property, $value) {
+        $property = new MediaPropery($type);
+        $property->addProperty($property, $value);
+        $this->response->addMediaProperty($property);
+    }
+
     protected function unescapeJSON($json) {
         return str_replace(array("\\", "\"{", "}\""), array("", "{", "}"), $json);
     }
