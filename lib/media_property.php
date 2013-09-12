@@ -7,7 +7,7 @@ class MediaPropery {
     const TYPE_SMS = "SMS";
     const TYPE_EMAIL  = "Email";
 
-    const PROPERTY_KEY_REDIRECTTIMEOUT = "timeout";
+    const PROPERTY_KEY_TIMEOUT = "timeout";
     const PROPERTY_KEY_TYPE = "type";
 
 

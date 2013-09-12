@@ -60,7 +60,8 @@ require_once('askfast/lib/answerresult.php');
     }
     
     function app_failure() {
-        
+        global $askfast;
+
         $askfast->say('/audio/nl/fout.wav');
         $askfast->finish();
     }
