@@ -56,26 +56,28 @@ class AskFast {
     }
     
     public function ask($ask, $type, $next=null) {
-        
-        if($this->response->question_text=="") {
-            // If the answer start with a slash it is a file
-            // and the host path should be added.
-            if(strpos($ask, "/")===0) {
-                $this->response->question_text = $this->url.substr($ask,1);
-            }
-            
-            // if it ends with wav it is a audio file
-            // so if not we should add text://
-            else if(!(substr($ask, -strlen(".wav")) == ".wav")) {
-                $this->response->question_text = "text://".$ask;
+
+        if($ask!="") {
+            if($this->response->question_text=="") {
+                // If the answer start with a slash it is a file
+                // and the host path should be added.
+                if(strpos($ask, "/")===0) {
+                    $this->response->question_text = $this->url.substr($ask,1);
+                }
+
+                // if it ends with wav it is a audio file
+                // so if not we should add text://
+                else if(!(substr($ask, -strlen(".wav")) == ".wav")) {
+                    $this->response->question_text = "text://".$ask;
+                } else {
+                    $this->response->question_text = $ask;
+                }
             } else {
-                $this->response->question_text = $ask;
-            }
-        } else {
-            // if it ends with wav it is a audio file
-            // so if not we should add text://
-            if(!(substr($ask, -strlen(".wav")) == ".wav")) {
-                $this->response->question_text.=$ask;
+                // if it ends with wav it is a audio file
+                // so if not we should add text://
+                if(!(substr($ask, -strlen(".wav")) == ".wav")) {
+                    $this->response->question_text.=$ask;
+                }
             }
         }
         $this->response->type=$type;
@@ -94,7 +96,7 @@ class AskFast {
         
         // if it ends with wav it is a audio file
         // so if not we should add text://
-        if(!(substr($answer, -strlen(".wav")) == ".wav")) {
+        if(!(substr($answer, -strlen(".wav")) == ".wav") && $answer!="") {
             $answer = "text://".$answer;
         }
         
@@ -104,26 +106,28 @@ class AskFast {
     }
     
     public function say($say, $next=null) {
-                
-        if($this->response->question_text=="") {
-            // If the answer start with a slash it is a file
-            // and the host path should be added.
-            if(strpos($say, "/")===0) {
-                $this->response->question_text = $this->url.substr($say,1);
-            }
-            
-            // if it ends with wav it is a audio file
-            // so if not we should add text://
-            else if(!(substr($say, -strlen(".wav")) == ".wav")) {
-                $this->response->question_text = "text://".$say;
+
+        if($say!="") {
+            if($this->response->question_text=="") {
+                // If the answer start with a slash it is a file
+                // and the host path should be added.
+                if(strpos($say, "/")===0) {
+                    $this->response->question_text = $this->url.substr($say,1);
+                }
+
+                // if it ends with wav it is a audio file
+                // so if not we should add text://
+                else if(!(substr($say, -strlen(".wav")) == ".wav")) {
+                    $this->response->question_text = "text://".$say;
+                } else {
+                    $this->response->question_text = $say;
+                }
             } else {
-                $this->response->question_text = $say;
-            }
-        } else {
-            // if it ends with wav it is a audio file
-            // so if not we should add text://
-            if(!(substr($say, -strlen(".wav")) == ".wav")) {
-                $this->response->question_text.=$say;
+                // if it ends with wav it is a audio file
+                // so if not we should add text://
+                if(!(substr($say, -strlen(".wav")) == ".wav")) {
+                    $this->response->question_text.=$say;
+                }
             }
         }
         
