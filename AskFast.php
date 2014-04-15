@@ -1,43 +1,53 @@
 <?php
-require_once('lib/question.php');
-require_once('lib/answer.php');
-require_once('lib/event_callback.php');
-require_once('lib/media_property.php');
+require_once('model/question.php');
+require_once('model/answer.php');
+require_once('model/event_callback.php');
+require_once('model/media_property.php');
+require_once('lib/OAuthClient.php');
 
 class AskFast {
-    
-    const QUESTION_TYPE_OPEN="open";
-    const QUESTION_TYPE_CLOSED="closed";
-    const QUESTION_TYPE_COMMENT="comment";
+
+    const ASK_FAST_URL = "http://live.ask-fast.com/dialoghandler/agents/dialog";
+    CONST ASK_FAST_KEYSERVER_URL = "http://live.ask-fast.com/keyserver/token";
+
+    const QUESTION_TYPE_OPEN = "open";
+    const QUESTION_TYPE_CLOSED = "closed";
+    const QUESTION_TYPE_COMMENT = "comment";
     
     protected $response = null;
     protected $url = null;
     
-    protected $publicKey = null;
-    protected $privateKey = null;
+    protected $accountId = null;
+    protected $refreshToken = null;
+    protected $accessToken = null;
     
-    public function __construct($publicKey=false, $privateKey=false) {
+    public function __construct($accountId=false, $refreshToken=false, $accessToken=false) {
         $file = str_ireplace("\\","",dirname($_SERVER['PHP_SELF']));
         $this->url = 'http://'.$_SERVER["HTTP_HOST"].$file.'/';
 
         $this->response = new Question();
         $this->response->question_id=1;
         
-        if($publicKey)
-            $this->publicKey = $publicKey;
+        if($accountId)
+            $this->publicKey = $accountId;
             
-        if($privateKey)
-            $this->privateKey = $privateKey;
+        if($refreshToken)
+            $this->refreshToken = $refreshToken;
+
+        if($accessToken)
+            $this->accessToken = $accessToken;
     }
     
     public function call($address, $url=null) {
-        
-        if($this->privateKey==null)
-            throw new Exception("No private key set!");
-            
-        if($this->publicKey==null)
-            throw new Exception("No public key set!");
-            
+
+        if($this->accessToken==null) {
+            $this->accessToken = $this->getAccessToken();
+        }
+
+        if($this->accessToken==null) {
+            throw new Exception("Failed to obtain accessToken. (Please check accountId and refreshToken)");
+        }
+
         if($url==null)
             $url = $this->url;
             
@@ -48,8 +58,8 @@ class AskFast {
         $params = new stdClass;
         $params->address = $address;
         $params->url = $url;
-        $params->publicKey = $this->publicKey;
-        $params->privateKey = $this->privateKey;
+        $params->accountId = $this->accountId;
+        $params->refreshToken = $this->refreshToken;
         $params->adapterType = "broadsoft";
         
         return $this->sendJSONRPC("outboundCall", $params);
@@ -179,6 +189,17 @@ class AskFast {
         $this->response->addMediaProperty($property);
     }
 
+    protected function getAccessToken() {
+        if($this->refreshToken==null)
+            throw new Exception("No refreshToken was set!");
+
+        if($this->accountId==null)
+            throw new Exception("No accountId was set!");
+
+        $client = new OAuthClient(ASK_FAST_KEYSERVER_URL, $this->accountId, $this->refreshToken);
+        return $client->getAccessToken();
+    }
+
     protected function unescapeJSON($json) {
         return str_replace(array("\\", "\"{", "}\""), array("", "{", "}"), $json);
     }
@@ -195,7 +216,7 @@ class AskFast {
     
     protected function sendJSONRPC($method, $params) {
         
-        $url = "http://ask-charlotte.appspot.com/rpc";
+        $url = ASK_FAST_URL;
         $req = new stdClass;
         $req->id = -1;
         $req->method = $method;
